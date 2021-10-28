@@ -1,0 +1,32 @@
+jobs:
+  include:
+    - language: node_js
+      node_js: 14
+      python: 3.7
+      addons:
+        sonarcloud:
+          organization: "swsnu"
+          token:
+            secure: "14ade7cb9a519507b36b4bc949a5ecdd18d2fdab"
+      dist: xenial
+      services: sqlite3
+      cache:
+        - yarn: true
+        - pip: true
+      install:
+        - cd frontend
+        - yarn install
+        - cd ..
+        - cd backend
+        - pip3 install -r requirements.txt
+        - cd ..
+      script:
+        - cd frontend
+        - ./node_modules/.bin/eslint src
+        - yarn test --coverage --watchAll=false
+        - cd ..
+        - cd backend
+        - pylint **/*.py --load-plugins pylint_django
+        - coverage run --source='.' manage.py test
+        - coverage xml
+        - cd .. && sonar-scanner
