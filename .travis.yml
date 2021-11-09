@@ -22,7 +22,7 @@ jobs:
         - cd ..
         - pip install coveralls
         - yarn global add coveralls
-        - gem install converalls-lcov
+        - gem install coveralls-lcov
       script:
         - cd frontend
         - ./node_modules/.bin/eslint src
