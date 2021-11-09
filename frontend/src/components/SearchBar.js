@@ -1,58 +1,36 @@
 import React, { useState } from "react";
 import "./SearchBar.css";
-import SearchIcon from "@mui/icons-material/Search";
-import CloseIcon from "@mui/icons-material/Close";
+import SelectSearch from "react-select-search";
+import statesData from "../states.json"
+import Fuse from "fuse.js";
 
-function SearchBar({ placeholder, data }) {
-  const [filteredData, setFilteredData] = useState([]);
-  const [wordEntered, setWordEntered] = useState("");
-
-  const handleFilter = (event) => {
-    const searchWord = event.target.value;
-    setWordEntered(searchWord);
-    const newFilter = data.filter((value) => {
-      return value.toLowerCase().includes(searchWord.toLowerCase());
-    });
-
-    if (searchWord === "") {
-      setFilteredData([]);
-    } else {
-      setFilteredData(newFilter);
-    }
-  };
-
-  const clearInput = () => {
-    setFilteredData([]);
-    setWordEntered("");
-  };
+function SearchBar() {
+  const [value, setValue] = useState("");
+  var states = Object.assign(statesData.map((state) => ({name: state, value: state})))
 
   return (
-    <div className="search">
-      <div className="searchInputs">
-        <input
-          type="text"
-          placeholder={placeholder}
-          value={wordEntered}
-          onChange={handleFilter}
-        />
-        <div className="searchIcon">
-          {filteredData.length === 0 ? (
-            <SearchIcon />
-          ) : (
-            <CloseIcon id="clearBtn" onClick={clearInput} />
-          )}
-        </div>
-      </div>
-      {filteredData.length != 0 && (
-        <div className="dataResult">
-          {filteredData.slice(0, 15).map((value, key) => {
-            return (
-                <div className="dataItem"> {value} </div>
-            );
-          })}
-        </div>
-      )}
-    </div>
+    <SelectSearch
+      options={states}
+      value={value}
+      onChange={setValue}
+      search
+      filterOptions={(options) => {
+        const fuse = new Fuse(options, {
+          keys: ["name", "value", "items.name"],
+          threshold: 0.3
+        });
+
+        return (value) => {
+          if (!value.length) {
+            return options;
+          }
+
+          return fuse.search(value);
+        };
+      }}
+      emptyMessage="Not found"
+      placeholder="Enter a state..."
+    />
   );
 }
 
