@@ -3,6 +3,7 @@ import "./SearchBar.css";
 import SelectSearch from "react-select-search";
 import Button from "@mui/material/Button";
 import Grid from "@mui/material/Grid";
+import Table from "react-bootstrap/Table";
 import statesData from "../states.json";
 import Fuse from "fuse.js";
 
@@ -14,8 +15,7 @@ function SearchBar() {
 
   const options = {
     headers: {
-      Authorization:
-        "5ae2e3f221c38a28845f05b6e976bb53f7ead9f5b8d57fb053738023",
+      Authorization: "5ae2e3f221c38a28845f05b6e976bb53f7ead9f5b8d57fb053738023",
     },
   };
 
@@ -27,38 +27,23 @@ function SearchBar() {
 
     const response2 = await fetch(placeUrl, options)
       .then((res) => res.json())
-      .then((data) => console.log(data));
+      .then((data) => data);
+    var places = [];
+    Object.keys(response2).forEach((key) => {
+      places.push(response2[key].name)
+    });
+    document.getElementById("td1").innerHTML = places[0];
+    document.getElementById("td2").innerHTML = places[1];
+    document.getElementById("td3").innerHTML = places[2];
+    document.getElementById("td4").innerHTML = places[3];
+    document.getElementById("td5").innerHTML = places[4];
+
   }
 
   function generateItin(loc) {
     const localUrl = `https://api.opentripmap.com/0.1/en/places/geoname?name=${loc}&apikey=5ae2e3f221c38a28845f05b6e976bb53f7ead9f5b8d57fb053738023`;
     fetchCoordinates(localUrl);
   }
-
-  // const response3 = await fetch(placeUrl, options).then(function (data) {
-  //   document.getElementById.innerHTML = `<p>5 objects with description in a 1km radius</p>`;
-  //   loadList();
-  // });
-
-  // function loadList() {
-  //   fetch(placeUrl, options).then(function (data) {
-  //     let list = document.getElementById("list");
-  //     list.innerHTML = "";
-  //     data.forEach((item) => list.appendChild(createListItem(item)));
-  //   });
-  // }
-
-  // function createListItem(item) {
-  //   let a = document.createElement("a");
-  //   a.className = "list-group-item list-group-item-action";
-  //   a.setAttribute("data-id", item.xid);
-  //   a.innerHTML = `<h5 class="list-group-item-heading">${item.name}</h5>
-  //                 <p class="list-group-item-text">${item.kinds}</p>`;
-  //   return a;
-  // }
-
-  // firstLoad();
-  // reportWebVitals();
 
   return (
     <div>
@@ -101,6 +86,30 @@ function SearchBar() {
           </Button>
         </Grid>
       </Grid>
+      <Table striped bordered hover>
+        <thead>
+          <tr>
+            <th>Location</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td id="td1"></td>
+          </tr>
+          <tr>
+            <td id="td2"></td>
+          </tr>
+          <tr>
+            <td id="td3"></td>
+          </tr>
+          <tr>
+            <td id="td4"></td>
+          </tr>
+          <tr>
+            <td id="td5"></td>
+          </tr>
+        </tbody>
+      </Table>
     </div>
   );
 }
