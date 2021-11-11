@@ -7,7 +7,7 @@ import statesData from "../states.json";
 import Fuse from "fuse.js";
 
 function SearchBar() {
-  const [value, setValue] = useState("");
+  const [location, setLocation] = useState("");
   var states = Object.assign(
     statesData.map((state) => ({ name: state, value: state }))
   );
@@ -18,8 +18,8 @@ function SearchBar() {
         <Grid item xs={8}>
           <SelectSearch
             options={states}
-            value={value}
-            onChange={setValue}
+            value={location}
+            onChange={setLocation}
             search
             filterOptions={(options) => {
               const fuse = new Fuse(options, {
@@ -27,17 +27,17 @@ function SearchBar() {
                 threshold: 0.3,
               });
 
-              return (value) => {
-                if (!value.length) {
+              return (location) => {
+                if (!location.length) {
                   return options;
                 }
 
-                return fuse.search(value);
+                return fuse.search(location);
               };
             }}
             emptyMessage="Not found"
             placeholder="Enter a state..."
-          />{" "}
+          />
         </Grid>
         <Grid item xs={4}>
           <Button
@@ -46,7 +46,7 @@ function SearchBar() {
             size="small"
             style={{marginLeft:"17px", marginTop:"17px"}}
             onClick={() => {
-              console.log(value);
+              console.log(location);
             }}
           >
             Generate
