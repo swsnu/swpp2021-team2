@@ -37,7 +37,6 @@ function SearchBar() {
     document.getElementById("td3").innerHTML = places[2];
     document.getElementById("td4").innerHTML = places[3];
     document.getElementById("td5").innerHTML = places[4];
-
   }
 
   function generateItin(loc) {
