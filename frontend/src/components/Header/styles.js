@@ -43,4 +43,7 @@ export default makeStyles((theme) => ({
     display: "flex",
     justifyContent: "space-between",
   },
+  mapButton: {
+    marginRight: 10,
+  }
 }));
